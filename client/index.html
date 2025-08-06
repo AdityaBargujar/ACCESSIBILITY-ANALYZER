@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accessibility Analyzer</title>
+</head>
+<body>
+  <h1>Web Accessibility Analyzer</h1>
+  <form id="scan-form">
+    <input type="text" id="url-input" placeholder="Enter URL to scan" required>
+    <button type="submit">Scan</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    const form = document.getElementById('scan-form');
+    const resultsDiv = document.getElementById('results');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('url-input').value;
+
+      const response = await fetch('http://localhost:5000/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await response.json();
+
+      resultsDiv.innerHTML = `<h3>Issues Found: ${data.issueCount}</h3>`;
+      data.issues.forEach((issue, i) => {
+        resultsDiv.innerHTML += `<p><strong>${issue.type}</strong><br><code>${issue.html}</code></p>`;
+      });
+    });
+  </script>
+</body>
+</html>
