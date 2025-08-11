@@ -1,0 +1,70 @@
+.guidelines-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.guidelines-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2d3748;
+}
+
+.intro {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin-bottom: 2rem;
+}
+
+.guidelines-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.guideline-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.guideline-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.guideline-card h2 {
+  color: #3182ce;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.guideline-card p {
+  font-size: 0.95rem;
+  color: #4a5568;
+  margin-bottom: 1rem;
+}
+
+.guideline-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.guideline-card li {
+  padding: 5px 0;
+  color: #2d3748;
+  position: relative;
+  padding-left: 20px;
+}
+
+.guideline-card li::before {
+  content: "✔";
+  color: #48bb78;
+  position: absolute;
+  left: 0;
+}
