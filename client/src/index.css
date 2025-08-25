@@ -30,9 +30,10 @@ header h1 {
   font-size: 2.8rem;
   color: #007bff; /* fallback solid color */
   background: linear-gradient(90deg, #007bff, #00c6ff);
-  background-clip: text;
+  
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 header p {
