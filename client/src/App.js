@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import AccessibilityGuidelines from "./pages/AccessibilityGuidelines";
 import AccessibilityScoreExplanation from "./pages/AccessibilityScoreExplanation";
 import AccessibilityTools from "./pages/AccessibilityTools";
+import AccessibilityQuiz from "./pages/AccessibilityQuiz";
 
 function App() {
   const [result, setResult] = useState(null);
@@ -42,6 +43,7 @@ function App() {
       <AccessibilityGuidelines/>
       <AccessibilityScoreExplanation />
       <AccessibilityTools />
+      <AccessibilityQuiz />
       <Footer />
     </div>
   );
