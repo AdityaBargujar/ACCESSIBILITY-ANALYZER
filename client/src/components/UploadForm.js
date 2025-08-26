@@ -1,41 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function UploadForm({ onAnalyze }) {
-  const [url, setUrl] = useState('');
   const [file, setFile] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!file) {
+      alert("Please select a file first!");
+      return;
+    }
+
     const formData = new FormData();
-    if (url) formData.append('url', url);
-    if (file) formData.append('file', file);
-    onAnalyze(formData);
+    formData.append("file", file);  // ✅ must match multer's "file"
+
+    try {
+      const response = await fetch("http://localhost:5000/analyze", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      onAnalyze(data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      onAnalyze({ error: "Something went wrong while analyzing file." });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="upload-form">
-      <label>
-        Website URL:
-        <input
-          type="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com"
-        />
-      </label>
-
-      <p>OR</p>
-
-      <label>
-        Upload HTML File:
-        <input
-          type="file"
-          accept=".html"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-      </label>
-
-      <button type="submit">Analyze Accessibility</button>
+      <input type="file" name="file" onChange={handleFileChange} /> {/* ✅ name added */}
+      <button type="submit">Analyze</button>
     </form>
   );
 }

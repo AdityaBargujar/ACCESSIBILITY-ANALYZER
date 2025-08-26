@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accessibility Test Page</title>
+</head>
+<body>
+  <h1>Welcome to Accessibility Analyzer Test</h1>
+  
+  <p>This page has some intentional accessibility issues:</p>
+
+  <!-- ❌ Missing alt attribute -->
+  <img src="image.jpg">
+
+  <!-- ❌ Low contrast text -->
+  <p style="color: lightgray; background-color: white;">
+    This text may be hard to read due to low contrast.
+  </p>
+
+  <!-- ✅ Accessible form -->
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

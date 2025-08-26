@@ -1,24 +1,32 @@
-import React from 'react';
+import React from "react";
 
 function ResultDisplay({ result }) {
   if (!result) return null;
-  if (result.error) {
-    return <div className="error">{result.error}</div>;
-  }
 
   return (
-    <div className="results">
-      <h2>Accessibility Report</h2>
-      {result.issues && result.issues.length > 0 ? (
-        <ul>
-          {result.issues.map((issue, index) => (
-            <li key={index}>
-              <strong>{issue.type}</strong>: {issue.message}
-            </li>
-          ))}
-        </ul>
+    <div className="result">
+      {result.error ? (
+        <p style={{ color: "red" }}>{result.error}</p>
       ) : (
-        <p>No major accessibility issues found. 🎉</p>
+        <>
+          <h2>Accessibility Report</h2>
+          <p><strong>Score:</strong> {result.score}/100</p>
+          <p><strong>Total Issues:</strong> {result.totalIssues || result.issues.length}</p>
+
+          <h3>Issues Found:</h3>
+          <ul>
+            {result.issues.map((issue, index) => (
+              <li key={index}>{issue}</li>
+            ))}
+          </ul>
+
+          <h3>Suggestions:</h3>
+          <ul>
+            {result.suggestions.map((tip, index) => (
+              <li key={index}>{tip}</li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
