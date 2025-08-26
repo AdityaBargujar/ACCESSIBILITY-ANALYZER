@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Big Accessibility Test Page</title>
+</head>
+<body>
+  <header>
+    <h1>My Test Website</h1>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Images Section</h2>
+
+      <!-- ❌ Missing alt attribute -->
+      <img src="cat.png">
+
+      <!-- ✅ With alt attribute -->
+      <img src="dog.png" alt="A cute dog">
+
+      <!-- ❌ Decorative image but missing role/presentation -->
+      <img src="decor.png">
+
+      <!-- ✅ Logo with alt -->
+      <img src="logo.png" alt="Company Logo">
+    </section>
+
+    <section>
+      <h2>Forms Section</h2>
+
+      <!-- ❌ Input without label -->
+      <input type="text" id="username" placeholder="Enter username">
+
+      <!-- ✅ Input with label -->
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Enter your email">
+
+      <!-- ❌ Input with no associated label -->
+      <input type="password" id="password" placeholder="Enter password">
+
+      <!-- ✅ Checkbox with label -->
+      <label><input type="checkbox" id="subscribe"> Subscribe to newsletter</label>
+
+      <!-- ❌ Radio buttons without labels -->
+      <input type="radio" name="gender" value="male">
+      <input type="radio" name="gender" value="female">
+
+      <!-- ✅ Button -->
+      <button type="submit">Submit</button>
+    </section>
+
+    <section>
+      <h2>Headings Test</h2>
+      <h4>This is a heading skipping H3</h4> <!-- ❌ Bad heading order -->
+      <h5>Subheading without H3 and H4 above</h5>
+    </section>
+
+    <section>
+      <h2>Links Section</h2>
+
+      <!-- ❌ Link with unclear text -->
+      <a href="page.html">Click here</a>
+
+      <!-- ✅ Descriptive link -->
+      <a href="services.html">View our services</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 My Test Website</p>
+  </footer>
+</body>
+</html>

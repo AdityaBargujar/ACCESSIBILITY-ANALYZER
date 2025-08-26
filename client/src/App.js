@@ -1,51 +1,57 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import UploadForm from './components/UploadForm';
-import ResultDisplay from './components/ResultDisplay';
-import Footer from './components/Footer';
-import './App.css';
-import Navbar from './components/Navbar';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import Header from "./components/Header";
+import UploadForm from "./components/UploadForm";
+import ResultDisplay from "./components/ResultDisplay";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 import AccessibilityGuidelines from "./pages/AccessibilityGuidelines";
 import AccessibilityScoreExplanation from "./pages/AccessibilityScoreExplanation";
 import AccessibilityTools from "./pages/AccessibilityTools";
 import AccessibilityQuiz from "./pages/AccessibilityQuiz";
 
-function App() {
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+function Home({ setResult }) {
+  const navigate = useNavigate();
 
   const handleAnalyze = async (formData) => {
-    setLoading(true);
-    setResult(null);
-
     try {
-      const response = await fetch('http://localhost:5000/analyze', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/analyze", {
+        method: "POST",
         body: formData,
       });
-
       const data = await response.json();
       setResult(data);
+      navigate("/results"); // ✅ redirect to results page
     } catch (error) {
-      setResult({ error: 'Something went wrong during analysis.' });
-    } finally {
-      setLoading(false);
+      setResult({ error: "Something went wrong during analysis." });
+      navigate("/results");
     }
   };
 
   return (
-    <div className="App">
-      <Navbar />
+    <>
       <Header />
       <UploadForm onAnalyze={handleAnalyze} />
-      {loading && <p className="loading">Analyzing website accessibility...</p>}
-      <ResultDisplay result={result} />
-      <AccessibilityGuidelines/>
+      <AccessibilityGuidelines />
       <AccessibilityScoreExplanation />
       <AccessibilityTools />
       <AccessibilityQuiz />
+    </>
+  );
+}
+
+function App() {
+  const [result, setResult] = useState(null);
+
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home setResult={setResult} />} />
+        <Route path="/results" element={<ResultDisplay result={result} />} />
+      </Routes>
       <Footer />
-    </div>
+    </Router>
   );
 }
 

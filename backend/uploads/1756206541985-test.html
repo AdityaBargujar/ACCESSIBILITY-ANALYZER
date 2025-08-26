@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accessibility Test Page</title>
+</head>
+<body>
+  <h1>Welcome to Accessibility Test</h1>
+
+  <!-- 🚨 Missing alt attribute -->
+  <img src="logo.png">
+
+  <!-- ✅ Good image -->
+  <img src="banner.png" alt="Website banner with text Accessibility Test">
+
+  <!-- 🚨 Input without label -->
+  <input type="text" id="username" placeholder="Enter username">
+
+  <!-- ✅ Input with label -->
+  <label for="email">Email:</label>
+  <input type="email" id="email" placeholder="Enter email">
+
+  <h2>Section Heading</h2>
+  <p>This is a paragraph for testing accessibility issues.</p>
+</body>
+</html>
