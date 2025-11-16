@@ -152,6 +152,92 @@ function runSEOChecks($) {
     });
   }
 
+  // 11. Structured data (JSON-LD, Schema.org)
+  const hasStructuredData = $('script[type="application/ld+json"]').length > 0;
+  if (!hasStructuredData) {
+    issues.push({ 
+      id: 'missing-structured-data', 
+      desc: 'No JSON-LD structured data - improves search result appearance and rich snippets' 
+    });
+  }
+
+  // 12. Performance hint: Favicon
+  const hasFavicon = $('link[rel="icon"]').length > 0 || $('link[rel="shortcut icon"]').length > 0;
+  if (!hasFavicon) {
+    issues.push({ 
+      id: 'missing-favicon', 
+      desc: 'Missing favicon - improves brand visibility in browser tabs' 
+    });
+  }
+
+  // 13. Hreflang for international SEO
+  const hasHreflang = $('link[rel="alternate"][hreflang]').length > 0;
+  if (!hasHreflang) {
+    issues.push({ 
+      id: 'missing-hreflang', 
+      desc: 'No hreflang tags - can improve multi-language/regional SEO' 
+    });
+  }
+
+  // 14. Character encoding
+  const hasCharset = $('meta[charset]').length > 0 || $('meta[http-equiv="Content-Type"]').length > 0;
+  if (!hasCharset) {
+    issues.push({ 
+      id: 'missing-charset', 
+      desc: 'Missing character encoding declaration - may cause text rendering issues' 
+    });
+  }
+
+  // 15. Page has significant text content (not just markup)
+  const bodyText = $('body').text().trim();
+  if (bodyText.length < 50) {
+    issues.push({ 
+      id: 'insufficient-content', 
+      desc: 'Page has very little text content - may be too thin for search engines' 
+    });
+  }
+
+  // 16. Heading hierarchy (H2, H3 after H1)
+  const hasH1 = $('h1').length > 0;
+  const hasH2orH3 = $('h2').length > 0 || $('h3').length > 0;
+  if (hasH1 && !hasH2orH3) {
+    issues.push({ 
+      id: 'flat-heading-hierarchy', 
+      desc: 'Page has H1 but no H2/H3 - consider a hierarchical structure for clarity' 
+    });
+  }
+
+  // 17. Links have descriptive text (not just "click here")
+  let poorLinkText = 0;
+  $('a').each((i, el) => {
+    const linkText = $(el).text().trim().toLowerCase();
+    if (linkText === 'click here' || linkText === 'learn more' || linkText === 'more' || linkText.length === 0) {
+      poorLinkText++;
+    }
+  });
+  if (poorLinkText > 0) {
+    issues.push({ 
+      id: 'poor-link-text', 
+      desc: `${poorLinkText} link(s) have generic text ("click here", "more") - use descriptive link text` 
+    });
+  }
+
+  // 18. Images have descriptive filenames (hint, not enforced)
+  let genericImageNames = 0;
+  $('img').each((i, el) => {
+    const src = $(el).attr('src') || '';
+    const filename = src.split('/').pop().toLowerCase();
+    if (filename.match(/^(image|img|photo|pic|picture|\d+)\.(jpg|png|gif|webp)/i)) {
+      genericImageNames++;
+    }
+  });
+  if (genericImageNames > 0) {
+    issues.push({ 
+      id: 'generic-image-names', 
+      desc: `${genericImageNames} image(s) have generic filenames - use descriptive names like "product-photo.jpg"` 
+    });
+  }
+
   return issues;
 }
 

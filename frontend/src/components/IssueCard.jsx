@@ -36,38 +36,38 @@ export default function IssueCard({ issue }) {
   const config = severityConfig[severity];
 
   return (
-    <div className={`${config.bg} border ${config.border} p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm flex flex-col h-full`}>
+    <div className={`${config.bg} border ${config.border} p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 backdrop-blur-sm flex flex-col h-full`}>
       
       {/* Header with Icon and Severity Badge */}
-      <div className="flex items-start justify-between mb-3 gap-2">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <span className="text-2xl shrink-0">{config.icon}</span>
-          <h3 className="font-bold text-lg text-white word-break">
+      <div className="flex items-start justify-between mb-2 gap-2">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <span className="text-xl shrink-0">{config.icon}</span>
+          <h3 className="font-bold text-base text-white word-break line-clamp-2">
             {issue.id?.replace(/-/g, " ").toUpperCase()}
           </h3>
         </div>
-        <span className={`${config.badge} px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap shrink-0`}>
+        <span className={`${config.badge} px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0`}>
           {severity.charAt(0).toUpperCase() + severity.slice(1)}
         </span>
       </div>
 
       {/* Description */}
-      <p className="text-gray-300 text-sm leading-relaxed mb-3 shrink-0">{issue.desc}</p>
+      <p className="text-gray-300 text-xs leading-relaxed mb-2 line-clamp-3">{issue.desc}</p>
 
-      {/* Location */}
+      {/* Location - Compact */}
       {issue.location && (
-        <div className="mb-3 p-2 bg-black/30 border border-gray-700/50 rounded-lg shrink-0">
-          <p className="text-xs text-gray-500 font-semibold mb-1">📍 LOCATION</p>
-          <p className="text-xs text-gray-400 font-mono break-all">{issue.location}</p>
+        <div className="mb-2 p-2 bg-black/30 border border-gray-700/50 rounded-md text-xs">
+          <p className="text-gray-500 font-semibold mb-0.5">📍 Location</p>
+          <p className="text-gray-400 font-mono break-all text-xs line-clamp-1">{issue.location}</p>
         </div>
       )}
 
-      {/* Code Snippet - Scrollable */}
+      {/* Code Snippet - Compact */}
       {issue.snippet && (
-        <div className="mb-3 p-3 bg-black/30 border border-gray-700/50 rounded-lg overflow-hidden shrink-0">
-          <p className="text-xs text-gray-500 mb-2 font-semibold">CODE SNIPPET</p>
-          <pre className="bg-black/50 p-3 rounded-lg text-xs text-gray-400 overflow-auto max-h-32 border border-gray-700/50">
-            {issue.snippet}
+        <div className="mb-2 p-2 bg-black/30 border border-gray-700/50 rounded-md overflow-hidden">
+          <p className="text-xs text-gray-500 mb-1 font-semibold">CODE</p>
+          <pre className="bg-black/50 p-2 rounded text-xs text-gray-400 overflow-auto max-h-24 border border-gray-700/50">
+            {issue.snippet.slice(0, 150)}
           </pre>
         </div>
       )}
@@ -76,10 +76,10 @@ export default function IssueCard({ issue }) {
       <div className="grow"></div>
 
       {/* Footer with Help Button */}
-      <div className="mt-4 pt-4 border-t border-gray-700/50 flex justify-end shrink-0">
+      <div className="mt-2 pt-2 border-t border-gray-700/50 flex justify-end">
         <button
           onClick={() => setShowHelp(true)}
-          className="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap"
+          className="bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 px-3 py-1 rounded text-xs font-semibold transition whitespace-nowrap"
         >
           ℹ️ Learn More
         </button>

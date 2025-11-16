@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const { runWCAGChecks } = require('./wcagChecks');
 const { runSEOChecks } = require('./seoChecks');
 const { calculateScore } = require('./scoring');
+const { generatePageRanking } = require('./pageRanking');
 const suggestionEngine = require('../suggestions/suggestionEngine');
 
 module.exports = async function runAudit(url) {
@@ -31,6 +32,14 @@ module.exports = async function runAudit(url) {
   const overall = Math.round(wcagResult.score * 0.7 + seoResult.score * 0.3);
 
   console.log('➡️ scoring done:', { wcag: wcagResult.score, seo: seoResult.score, overall });
+
+  // Generate page ranking and grading
+  const pageRanking = generatePageRanking(
+    wcagResult.score, 
+    seoResult.score, 
+    wcagResult.breakdown, 
+    seoResult.breakdown
+  );
 
   // Build audit object to pass to suggestion engine
   const auditForSuggestions = {
@@ -64,6 +73,7 @@ module.exports = async function runAudit(url) {
       wcagWeight: 70,
       seoWeight: 30
     },
+    ranking: pageRanking,
     suggestions
   };
 };
