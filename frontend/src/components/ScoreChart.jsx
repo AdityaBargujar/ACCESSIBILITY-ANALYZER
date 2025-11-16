@@ -7,15 +7,8 @@ export default function ScoreChart({ score = 0, label = "Score" }) {
     { name: "rest", value: 100 - score },
   ];
 
-  const getGradeInfo = (score) => {
-    if (score >= 90) return { grade: "A", color: "#10b981", bgGrade: "bg-green-500/20", textGrade: "text-green-300" };
-    if (score >= 80) return { grade: "B", color: "#3b82f6", bgGrade: "bg-blue-500/20", textGrade: "text-blue-300" };
-    if (score >= 70) return { grade: "C", color: "#f59e0b", bgGrade: "bg-amber-500/20", textGrade: "text-amber-300" };
-    if (score >= 60) return { grade: "D", color: "#ef5350", bgGrade: "bg-orange-500/20", textGrade: "text-orange-300" };
-    return { grade: "F", color: "#dc2626", bgGrade: "bg-red-500/20", textGrade: "text-red-300" };
-  };
-
-  const gradeInfo = getGradeInfo(score);
+  // choose a neutral color based on score range (no letter grades)
+  const color = score >= 90 ? "#10b981" : score >= 75 ? "#3b82f6" : score >= 60 ? "#f59e0b" : "#ef4444";
 
   return (
     <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center">
@@ -30,16 +23,13 @@ export default function ScoreChart({ score = 0, label = "Score" }) {
           startAngle={90}
           endAngle={-270}
         >
-          <Cell fill={gradeInfo.color} />
+          <Cell fill={color} />
           <Cell fill="#1f2937" />
         </Pie>
       </PieChart>
 
       <div className="mt-3 flex items-center gap-3">
         <div className="text-3xl font-bold text-white">{score}</div>
-        <div className={`${gradeInfo.bgGrade} ${gradeInfo.textGrade} px-3 py-1 rounded-lg font-bold text-lg border border-opacity-30`}>
-          {gradeInfo.grade}
-        </div>
       </div>
     </div>
   );
