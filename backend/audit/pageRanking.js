@@ -1,43 +1,6 @@
-// Page ranking and grading system
-// Assigns A-F grades and performance tiers based on accessibility and SEO scores
-
-function calculateGrade(score) {
-  // Traditional letter grade system
-  // A: 90-100 (Excellent)
-  // B: 80-89  (Good)
-  // C: 70-79  (Acceptable)
-  // D: 60-69  (Poor)
-  // F: <60    (Failing)
-  if (score >= 90) return 'A';
-  if (score >= 80) return 'B';
-  if (score >= 70) return 'C';
-  if (score >= 60) return 'D';
-  return 'F';
-}
-
-function getGradeColor(grade) {
-  // Return hex color for grade visualization
-  const colors = {
-    'A': '#0cce6b', // Green (excellent)
-    'B': '#ffc400', // Amber/Yellow (good)
-    'C': '#ff8c00', // Orange (acceptable)
-    'D': '#ff6b6b', // Red-Orange (poor)
-    'F': '#c41e3a'  // Dark Red (failing)
-  };
-  return colors[grade] || '#999';
-}
-
-function getGradeDescription(grade) {
-  const descriptions = {
-    'A': 'Excellent - Page meets high accessibility and SEO standards',
-    'B': 'Good - Page is accessible but has minor improvements available',
-    'C': 'Acceptable - Page has moderate accessibility/SEO issues',
-    'D': 'Poor - Page has significant accessibility/SEO problems',
-    'F': 'Failing - Page has critical accessibility or SEO issues'
-  };
-  return descriptions[grade] || 'Unknown';
-}
-
+// Page ranking helper (grades removed)
+// This module assigns performance tiers, recommendations and comparison metrics
+// based only on numeric scores (no A-F grading system).
 function assignPerformanceTier(wcagScore, seoScore) {
   // Assigns a performance tier based on both scores
   // Tier 1 (Best): Both scores >= 85
@@ -149,24 +112,19 @@ function generateRecommendationPriority(wcagBreakdown, seoBreakdown) {
 }
 
 function calculateComparisonMetrics(wcagScore, seoScore, issues = []) {
-  // Provide comparison metrics for benchmarking
+  // Provide comparison metrics for benchmarking (no grade letters)
+  const overall = Math.round((wcagScore + seoScore) / 2);
   return {
     wcag: {
       score: wcagScore,
-      grade: calculateGrade(wcagScore),
-      percentile: getPercentile(wcagScore),
-      label: `WCAG Accessibility: ${calculateGrade(wcagScore)}`
+      percentile: getPercentile(wcagScore)
     },
     seo: {
       score: seoScore,
-      grade: calculateGrade(seoScore),
-      percentile: getPercentile(seoScore),
-      label: `SEO Optimization: ${calculateGrade(seoScore)}`
+      percentile: getPercentile(seoScore)
     },
     overall: {
-      score: Math.round((wcagScore + seoScore) / 2),
-      grade: calculateGrade(Math.round((wcagScore + seoScore) / 2)),
-      label: `Overall Score: ${Math.round((wcagScore + seoScore) / 2)}`
+      score: overall
     }
   };
 }
@@ -184,34 +142,19 @@ function getPercentile(score) {
 function generatePageRanking(wcagScore, seoScore, wcagBreakdown, seoBreakdown) {
   // Main function to generate complete ranking and grading
   return {
-    grades: {
-      wcag: calculateGrade(wcagScore),
-      seo: calculateGrade(seoScore),
-      overall: calculateGrade(Math.round((wcagScore + seoScore) / 2))
-    },
     performance: assignPerformanceTier(wcagScore, seoScore),
     metrics: calculateComparisonMetrics(wcagScore, seoScore),
     recommendations: generateRecommendationPriority(wcagBreakdown, seoBreakdown),
     summary: {
       wcagScore,
       seoScore,
-      overallScore: Math.round((wcagScore + seoScore) / 2),
-      wcagGrade: calculateGrade(wcagScore),
-      seoGrade: calculateGrade(seoScore),
-      overallGrade: calculateGrade(Math.round((wcagScore + seoScore) / 2)),
-      wcagColor: getGradeColor(calculateGrade(wcagScore)),
-      seoColor: getGradeColor(calculateGrade(seoScore)),
-      overallColor: getGradeColor(calculateGrade(Math.round((wcagScore + seoScore) / 2))),
-      message: getGradeDescription(calculateGrade(Math.round((wcagScore + seoScore) / 2)))
+      overallScore: Math.round((wcagScore + seoScore) / 2)
     }
   };
 }
 
-module.exports = { 
-  calculateGrade, 
-  getGradeColor, 
-  getGradeDescription, 
-  assignPerformanceTier, 
+module.exports = {
+  assignPerformanceTier,
   generateRecommendationPriority,
   calculateComparisonMetrics,
   generatePageRanking
