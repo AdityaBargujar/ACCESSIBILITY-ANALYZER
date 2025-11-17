@@ -26,12 +26,10 @@ export default function Home() {
       
       {/* Title */}
       <h1 className="text-6xl md:text-7xl font-extrabold text-center bg-linear-to-r from-blue-400 to-green-400 bg-clip-text text-transparent drop-shadow-lg mb-6">
-        Web Accessibility Analyzer
+        Accessibility Analyzer
       </h1>
 
-      <p className="text-gray-300 text-center text-lg max-w-2xl mb-12">
-        Scan any website for WCAG 2.2, SEO, and accessibility issues — powered by AI.
-      </p>
+     
 
       {/* Glassmorphic Box */}
       <div className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-xl p-8 rounded-3xl w-full max-w-2xl">
@@ -55,7 +53,7 @@ export default function Home() {
       </div>
 
       <p className="text-gray-500 mt-10">
-        Built with AI • WCAG 2.2 • SEO Analyzer • Accessibility Engine
+        WCAG • SEO Analyzer 
       </p>
     </div>
   );
