@@ -95,11 +95,6 @@ async function hfSuggest(audit) {
     }
   }
 
-  // HF router may return several shapes. Normalize common ones:
-  // - [{generated_text: '...'}]
-  // - { generated_text: '...' }
-  // - { data: [{generated_text: '...'}] }
-  // - plain string
   let text = '';
   if (Array.isArray(res.data) && res.data[0] && res.data[0].generated_text) {
     text = res.data[0].generated_text;
@@ -154,7 +149,7 @@ async function openaiSuggest(audit) {
 }
 
 module.exports = async function suggestionEngine(audit) {
-  // Prefer Hugging Face token if present, otherwise fall back to OpenAI if provided
+  // Try Hugging Face if token is present
   if (process.env.HF_API_TOKEN) {
     try {
       console.log('📝 Attempting AI suggestions via Hugging Face model:', process.env.HF_MODEL || 'gpt2');
@@ -162,32 +157,55 @@ module.exports = async function suggestionEngine(audit) {
       console.log('✅ HF suggestions generated:', aiRes.length, 'suggestions');
       return aiRes.map(s => ({ ...s, source: s.source || 'ai' }));
     } catch (err) {
-      console.error('❌ Hugging Face suggestion failed, falling back to other methods:');
-      console.error('Error:', err.response?.status, err.response?.data || err.message);
+      console.error('❌ Hugging Face suggestion failed (status:', err.response?.status, '), falling back to local rules:');
+      console.error('Error:', err.message);
+      // Continue to local fallback below
     }
   }
 
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      console.log('📝 Attempting AI suggestions with OpenAI model:', process.env.AI_MODEL || 'gpt-4o-mini');
-      const aiRes = await openaiSuggest(audit);
-      console.log('✅ OpenAI suggestions generated:', aiRes.length, 'suggestions');
-      return aiRes.map(s => ({ ...s, source: s.source || 'ai' }));
-    } catch (err) {
-      console.error('❌ OpenAI suggestion failed, falling back to local rules:');
-      console.error('Error:', err.response?.status, err.response?.data || err.message);
-    }
-  }
-
-  // Local fallback
+  // Local fallback - fast, always works
+  console.log('📝 Using local fallback suggestions');
   const suggestions = [];
+  const issueMap = {};
+  
+  // Map critical/major issues to high-priority suggestions
   (audit.wcag.issues || []).forEach(issue => {
     const id = (issue.id || '').toLowerCase();
-    if (id.includes('alt')) suggestions.push({ title: 'Add alt text', text: 'Provide descriptive alt attributes for images.', source: 'local' });
-    else if (id.includes('lang')) suggestions.push({ title: 'Set HTML lang', text: 'Add lang attribute to <html>.', source: 'local' });
-    else if (id.includes('h1')) suggestions.push({ title: 'Add or fix H1', text: 'Ensure the page has a single H1 describing the page.', source: 'local' });
-    else suggestions.push({ title: 'Fix issue', text: issue.desc || 'Review and fix.', source: 'local' });
+    if (!issueMap[id]) {
+      if (id.includes('missing-lang')) {
+        issueMap[id] = { title: 'Add HTML lang attribute', text: 'Add lang="en" (or your language) to <html> tag. This helps screen readers pronounce content correctly.', source: 'local' };
+      } else if (id.includes('missing-title')) {
+        issueMap[id] = { title: 'Add page title', text: 'Every page needs a unique <title> tag describing its content.', source: 'local' };
+      } else if (id.includes('missing-alt')) {
+        issueMap[id] = { title: 'Add alt text to images', text: 'Provide descriptive alt attributes for all images so screen readers can describe them.', source: 'local' };
+      } else if (id.includes('missing-h1')) {
+        issueMap[id] = { title: 'Add H1 heading', text: 'Every page should have one H1 tag describing its main topic.', source: 'local' };
+      } else if (id.includes('color-contrast')) {
+        issueMap[id] = { title: 'Fix color contrast', text: 'Ensure text and background have sufficient contrast (WCAG AA: 4.5:1 for normal text).', source: 'local' };
+      } else if (id.includes('form-missing-label')) {
+        issueMap[id] = { title: 'Add form labels', text: 'Associate <label> elements with form inputs using the "for" attribute or nesting.', source: 'local' };
+      } else {
+        issueMap[id] = { title: 'Fix accessibility issue', text: issue.desc || 'Review and fix this accessibility issue.', source: 'local' };
+      }
+    }
   });
-  (audit.seo.issues || []).forEach(issue => suggestions.push({ title: 'SEO', text: issue.desc, source: 'local' }));
-  return suggestions;
+
+  (audit.seo.issues || []).forEach(issue => {
+    const id = (issue.id || '').toLowerCase();
+    if (!issueMap[id]) {
+      if (id.includes('missing-meta-desc')) {
+        issueMap[id] = { title: 'Add meta description', text: 'Add a 120–160 character meta description to improve search engine snippets.', source: 'local' };
+      } else if (id.includes('missing-canonical')) {
+        issueMap[id] = { title: 'Add canonical link', text: 'Add a canonical link to prevent duplicate content penalties.', source: 'local' };
+      } else if (id.includes('missing-og')) {
+        issueMap[id] = { title: 'Add Open Graph tags', text: 'Add og:title, og:description, og:image for better social media sharing.', source: 'local' };
+      } else {
+        issueMap[id] = { title: 'Fix SEO issue', text: issue.desc || 'Review and fix this SEO issue.', source: 'local' };
+      }
+    }
+  });
+
+  // Return unique suggestions (one per issue type)
+  suggestions.push(...Object.values(issueMap));
+  return suggestions.slice(0, 6); // Limit to top 6 suggestions
 };

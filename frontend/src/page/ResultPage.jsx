@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import ScoreChart from "../components/ScoreChart";
 import IssueCard from "../components/IssueCard";
@@ -36,6 +35,8 @@ export default function ResultPage() {
         <ScoreChart score={audit.seo.score} label="SEO" />
         <ScoreChart score={audit.overall.score} label="Overall" />
       </div>
+
+      
 
       {/* Issue Summary Cards */}
       <div className="grid md:grid-cols-2 gap-4 mb-12">

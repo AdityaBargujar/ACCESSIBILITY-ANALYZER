@@ -3,11 +3,7 @@
 // based only on numeric scores (no A-F grading system).
 function assignPerformanceTier(wcagScore, seoScore) {
   // Assigns a performance tier based on both scores
-  // Tier 1 (Best): Both scores >= 85
-  // Tier 2 (Good): Both scores >= 75
-  // Tier 3 (Fair): Both scores >= 60
-  // Tier 4 (Needs Work): One or both < 60
-
+  
   const avgScore = (wcagScore + seoScore) / 2;
 
   if (wcagScore >= 85 && seoScore >= 85) {

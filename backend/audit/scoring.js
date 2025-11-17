@@ -66,17 +66,9 @@ function calculateScore(issues = [], type = "wcag") {
 
   // Simple penalty calculation: weighted by severity
   // Critical: 20 pts each | Major: 10 pts each | Moderate: 4 pts each | Minor: 1 pt each
-  const basePenalty =
-    critical * 20 +
-    major * 10 +
-    moderate * 4 +
-    minor * 1;
+  const basePenalty =critical * 20 +major * 10 + moderate * 4 + minor * 1;
 
-  // Cap penalty at 100 (maximum deduction)
-  // This ensures scores range from 0-100 realistically
   const cappedPenalty = Math.min(100, basePenalty);
-
-  // Calculate final score (0-100) using linear deduction
   let score = 100 - cappedPenalty;
 
   // Ensure score is in valid range
@@ -96,5 +88,4 @@ function calculateScore(issues = [], type = "wcag") {
     }
   };
 }
-
 module.exports = { calculateScore };
