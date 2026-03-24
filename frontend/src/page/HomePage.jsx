@@ -6,21 +6,23 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function runAudit() {
-    if (!url) return;
-    setLoading(true);
+async function runAudit() {
+  if (!url) return;
+  setLoading(true);
 
-    const resp = await fetch("http://localhost:4000/api/audit", {
+  const resp = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/audit`,
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url })
-    });
+    }
+  );
 
-    const data = await resp.json();
-    setLoading(false);
-    navigate("/results", { state: data });
-  }
-
+  const data = await resp.json();
+  setLoading(false);
+  navigate("/results", { state: data });
+}
   return (
     <div className="min-h-screen bg-[#0d1117] text-white flex flex-col items-center justify-center px-4">
       
