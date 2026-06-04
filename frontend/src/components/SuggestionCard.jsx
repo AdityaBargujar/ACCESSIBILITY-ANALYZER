@@ -1,27 +1,33 @@
 export default function SuggestionCard({ s }) {
   return (
-    <div className="bg-linear-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 p-6 rounded-xl shadow-lg hover:shadow-green-500/30 transition-all duration-300 backdrop-blur-sm group">
+    <div className="bg-white border border-green-100 p-6 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
       
-      {/* Header with Icon */}
-      <div className="flex items-start gap-3 mb-4">
-        <span className="text-2xl">💡</span>
-        <h3 className="font-bold text-lg text-green-300 group-hover:text-green-200 transition">
+      <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-white pointer-events-none"></div>
+
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-5 relative z-10">
+        <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm border border-green-200 group-hover:scale-110 transition-transform">
+          💡
+        </div>
+        <h3 className="font-black text-[17px] text-[#0a1024] leading-snug mt-1">
           {s.title}
         </h3>
       </div>
 
       {/* Description */}
-      <p className="text-gray-300 text-sm leading-relaxed mb-4 ml-11">
+      <p className="text-[#4b5563] text-[15px] leading-relaxed mb-6 font-medium relative z-10">
         {s.text}
       </p>
 
+      <div className="grow"></div>
+
       {/* References/Tags */}
       {s.references && s.references.length > 0 && (
-        <div className="ml-11 flex flex-wrap gap-2 pt-3 border-t border-green-500/20">
+        <div className="flex flex-wrap gap-2 pt-5 border-t border-gray-100 relative z-10">
           {s.references.map((ref, i) => (
             <span
               key={i}
-              className="bg-green-500/20 text-green-300 text-xs px-3 py-1 rounded-full font-medium hover:bg-green-500/30 transition"
+              className="bg-gray-50 text-gray-600 border border-gray-200 text-[11px] px-3 py-1.5 rounded-full font-bold uppercase tracking-widest shadow-sm"
             >
               {ref}
             </span>
@@ -30,11 +36,15 @@ export default function SuggestionCard({ s }) {
       )}
 
       {/* Source Badge */}
-      <div className="mt-4 ml-11">
+      <div className="mt-5 pt-4 border-t border-gray-100 relative z-10">
         {s.source === 'ai' ? (
-          <span className="text-xs text-green-400 font-semibold opacity-75">✨ AI Suggestion</span>
+          <div className="flex items-center gap-2 text-xs text-[#0047ff] font-bold bg-blue-50 border border-blue-100 w-max px-3 py-1.5 rounded-lg shadow-sm">
+            <span>✨</span> AI GENERATED
+          </div>
         ) : (
-          <span className="text-xs text-gray-400 font-medium opacity-70">Automated suggestion</span>
+          <div className="flex items-center gap-2 text-xs text-gray-500 font-bold bg-gray-50 border border-gray-200 w-max px-3 py-1.5 rounded-lg shadow-sm">
+            <span>⚙️</span> AUTOMATED RULE
+          </div>
         )}
       </div>
     </div>

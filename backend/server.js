@@ -29,11 +29,7 @@ app.post('/api/audit', async (req,res)=>{
   console.log('🔍 AUDIT REQUEST:', url);
   try {
     const audit = await runAudit(url);
-    const suggestions = await suggestionEngine(audit).catch(err => {
-      console.error('Suggestion engine error:', err && (err.message || err));
-      return [];
-    });
-    res.json({ ...audit, suggestions });
+    res.json(audit);
   } catch (err) {
     console.error('❌ BACKEND AUDIT ERROR:', err && (err.stack || err.message));
     res.status(500).json({ error: 'Audit failed', detail: String(err && err.message) });

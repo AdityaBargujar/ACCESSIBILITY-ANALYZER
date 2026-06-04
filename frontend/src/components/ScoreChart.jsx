@@ -7,30 +7,34 @@ export default function ScoreChart({ score = 0, label = "Score" }) {
     { name: "rest", value: 100 - score },
   ];
 
-  // choose a neutral color based on score range (no letter grades)
+  // choose a color based on score range
   const color = score >= 90 ? "#10b981" : score >= 75 ? "#3b82f6" : score >= 60 ? "#f59e0b" : "#ef4444";
 
   return (
-    <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center">
-      <h3 className="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wide">{label}</h3>
-
-      <PieChart width={140} height={140}>
-        <Pie
-          data={data}
-          dataKey="value"
-          outerRadius={60}
-          innerRadius={42}
-          startAngle={90}
-          endAngle={-270}
-        >
-          <Cell fill={color} />
-          <Cell fill="#1f2937" />
-        </Pie>
-      </PieChart>
-
-      <div className="mt-3 flex items-center gap-3">
-        <div className="text-3xl font-bold text-white">{score}</div>
+    <div className="flex flex-col items-center justify-center w-full max-w-[200px] hover:scale-105 transition-transform duration-300">
+      <div className="relative flex items-center justify-center mb-4">
+        <PieChart width={150} height={150}>
+          <Pie
+            data={data}
+            dataKey="value"
+            outerRadius={70}
+            innerRadius={55}
+            startAngle={90}
+            endAngle={-270}
+            stroke="none"
+          >
+            <Cell fill={color} />
+            <Cell fill="#f1f5f9" />
+          </Pie>
+        </PieChart>
+        
+        {/* Score in center */}
+        <div className="absolute flex flex-col items-center justify-center mt-1">
+          <span className="text-4xl font-black text-[#0a1024] leading-none">{score}</span>
+        </div>
       </div>
+      
+      <h3 className="text-[14px] font-bold text-[#0a1024]">{label}</h3>
     </div>
   );
 }
